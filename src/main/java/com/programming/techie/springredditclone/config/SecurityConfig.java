@@ -36,6 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/auth/**")
                 .permitAll()
+                .antMatchers("/h2-console/**/**")
+                .permitAll()
                 .antMatchers(HttpMethod.GET, "/api/subreddit")
                 .permitAll()
                 .antMatchers(HttpMethod.GET, "/api/posts/")
@@ -51,6 +53,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .anyRequest()
                 .authenticated();
+        httpSecurity.headers().frameOptions().disable();
+        
         httpSecurity.addFilterBefore(jwtAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class);
     }

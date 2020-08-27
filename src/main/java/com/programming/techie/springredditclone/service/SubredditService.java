@@ -4,6 +4,7 @@ import com.programming.techie.springredditclone.dto.SubredditDto;
 import com.programming.techie.springredditclone.exceptions.SpringRedditException;
 import com.programming.techie.springredditclone.mapper.SubredditMapper;
 import com.programming.techie.springredditclone.model.Subreddit;
+import com.programming.techie.springredditclone.model.User;
 import com.programming.techie.springredditclone.repository.SubredditRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +22,14 @@ public class SubredditService {
 
     private final SubredditRepository subredditRepository;
     private final SubredditMapper subredditMapper;
+    private final AuthService authService;
 
     @Transactional
     public SubredditDto save(SubredditDto subredditDto) {
-        Subreddit save = subredditRepository.save(subredditMapper.mapDtoToSubreddit(subredditDto));
+    	
+    	User user = authService.getCurrentUser();
+    	
+        Subreddit save = subredditRepository.save(subredditMapper.mapDtoToSubreddit(subredditDto,user));
         subredditDto.setId(save.getId());
         return subredditDto;
     }
